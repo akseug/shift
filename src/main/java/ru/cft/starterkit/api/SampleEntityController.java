@@ -2,13 +2,17 @@ package ru.cft.starterkit.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import ru.cft.starterkit.entity.SampleEntity;
 import ru.cft.starterkit.exception.ObjectNotFoundException;
 import ru.cft.starterkit.service.SampleEntityService;
 
-@RestController
+@RestController(Paths.SAMPLES)
 public class SampleEntityController {
 
     private final SampleEntityService sampleEntityService;
@@ -18,9 +22,7 @@ public class SampleEntityController {
         this.sampleEntityService = sampleEntityService;
     }
 
-    @RequestMapping(
-            method = RequestMethod.POST,
-            path = "/sample",
+    @PostMapping(
             consumes = "application/x-www-form-urlencoded",
             produces = "application/json"
     )
@@ -31,7 +33,7 @@ public class SampleEntityController {
         return sampleEntityService.add(foo, bar);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/sample/{id}", produces = "application/json")
+    @GetMapping(path = Paths._ID, produces = "application/json")
     public SampleEntity get(@PathVariable(name = "id") Long id) {
         try {
             return sampleEntityService.get(id);
