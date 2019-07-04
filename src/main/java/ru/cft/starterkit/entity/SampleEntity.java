@@ -13,14 +13,12 @@ public class SampleEntity {
 
     private Double bar;
 
-    @JsonIgnore
-    private UUID baz;
+    private String sessionId;
 
-    public SampleEntity(String foo, Double bar, UUID baz) {
-        this.foo = foo;
-        this.bar = bar;
-        this.baz = baz;
-    }
+    @JsonIgnore
+    private String baz;
+
+    public SampleEntity() {}
 
     public Long getId() {
         return id;
@@ -46,38 +44,47 @@ public class SampleEntity {
         this.bar = bar;
     }
 
-    public UUID getBaz() {
+    public String getBaz() {
         return baz;
     }
 
-    public void setBaz(UUID baz) {
+    public void setBaz(String baz) {
         this.baz = baz;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SampleEntity)) return false;
-        SampleEntity entity = (SampleEntity) o;
-        return Objects.equals(id, entity.id) &&
-               Objects.equals(foo, entity.foo) &&
-               Objects.equals(bar, entity.bar) &&
-               Objects.equals(baz, entity.baz);
+        if (o == null || getClass() != o.getClass()) return false;
+        SampleEntity that = (SampleEntity) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(foo, that.foo) &&
+                Objects.equals(bar, that.bar) &&
+                Objects.equals(sessionId, that.sessionId) &&
+                Objects.equals(baz, that.baz);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, foo, bar, baz);
+        return Objects.hash(id, foo, bar, sessionId, baz);
     }
 
     @Override
     public String toString() {
         return "SampleEntity{" +
-               "id=" + id +
-               ", foo='" + foo + '\'' +
-               ", bar=" + bar +
-               ", baz=" + baz +
-               '}';
+                "id=" + id +
+                ", foo='" + foo + '\'' +
+                ", bar=" + bar +
+                ", sessionId='" + sessionId + '\'' +
+                ", baz=" + baz +
+                '}';
     }
-
 }

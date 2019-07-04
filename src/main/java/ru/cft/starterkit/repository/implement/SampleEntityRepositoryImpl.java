@@ -32,7 +32,7 @@ public class SampleEntityRepositoryImpl implements SampleEntityRepository {
 
     @Autowired
     public SampleEntityRepositoryImpl(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+        this.objectMapper = new ObjectMapper();
     }
 
     @Override

@@ -21,7 +21,12 @@ public class SampleEntityServiceImpl implements SampleEntityService {
 
     @Override
     public SampleEntity add(String foo, Double bar) {
-        return sampleEntityRepository.add(new SampleEntity(foo, bar, UUID.randomUUID()));
+        SampleEntity sampleEntity = new SampleEntity();
+        sampleEntity.setFoo(foo);
+        sampleEntity.setBar(bar);
+        sampleEntity.setBaz("Create timestamp: " + System.currentTimeMillis());
+        sampleEntity.setSessionId(UUID.randomUUID().toString());
+        return sampleEntityRepository.add(sampleEntity);
     }
 
     @Override
