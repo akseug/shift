@@ -3,7 +3,7 @@ package ru.cft.starterkit.repository.implement;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import ru.cft.starterkit.entity.SampleEntity;
 import ru.cft.starterkit.exception.ObjectNotFoundException;
@@ -20,9 +20,9 @@ import java.util.concurrent.atomic.AtomicLong;
 @Repository
 public class SampleEntityRepositoryImpl implements SampleEntityRepository {
 
-    private static final File STORAGE_FILE = new File("C:\\temp\\samples.json");
-
     private static final Logger log = LoggerFactory.getLogger(SampleEntityRepositoryImpl.class);
+
+    private final File storageFile;
 
     private final AtomicLong idCounter = new AtomicLong();
 
@@ -30,8 +30,8 @@ public class SampleEntityRepositoryImpl implements SampleEntityRepository {
 
     private final ObjectMapper objectMapper;
 
-    @Autowired
-    public SampleEntityRepositoryImpl(ObjectMapper objectMapper) {
+    public SampleEntityRepositoryImpl(@Value("${repository.storage.file}") String storageFilePath) {
+        this.storageFile = new File(storageFilePath);
         this.objectMapper = new ObjectMapper();
     }
 
@@ -60,7 +60,7 @@ public class SampleEntityRepositoryImpl implements SampleEntityRepository {
     @PostConstruct
     private void initStorage() {
         try {
-            SampleEntity[] entriesFromFile = objectMapper.readValue(STORAGE_FILE, SampleEntity[].class);
+            SampleEntity[] entriesFromFile = objectMapper.readValue(storageFile, SampleEntity[].class);
             for (SampleEntity sampleEntity : entriesFromFile) {
                 storage.put(sampleEntity.getId(), sampleEntity);
                 if (idCounter.get() < sampleEntity.getId()) {
@@ -77,7 +77,7 @@ public class SampleEntityRepositoryImpl implements SampleEntityRepository {
     private void shutdown() {
         log.info("Start shutdown!");
         try {
-            objectMapper.writeValue(STORAGE_FILE, storage.values());
+            objectMapper.writeValue(storageFile, storage.values());
         } catch (IOException e) {
             e.printStackTrace();
         }
